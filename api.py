@@ -4,17 +4,22 @@ from random import randint
 import json, os, sys
 from mongo_client import find_status, insert_status
 
+def print_err(err):
+    print(str(err) + " on line " + str(sys.exc_info()[2].tb_lineno))
+
 def load_config():
     return json.load(open(os.path.join(sys.path[0],"config.json")))
 
 config = load_config()
 
+
+
 auth = tweepy.OAuthHandler(config["consumer_key"], config["consumer_secret"])
-auth.set_access_token(config["access_token"], ["access_token_secret"])
+auth.set_access_token(config["access_token"], config["access_token_secret"])
 
 api = tweepy.API(auth)
-replied_statuses = []
-checked_users = []
+KEY_WORD = "tears"
+SCREEN_NAME = api.me()._json["screen_name"]
 
 def follow_user(username):
     api.create_friendship(username)
@@ -29,7 +34,8 @@ def get_followers():
 
 def get_followers_and_tweet_tears():
     try:
-        for page in tweepy.Cursor(api.followers, screen_name=api.me()._json["screen_name"], count=200).pages():
+        print(api.followers())
+        for page in tweepy.Cursor(api.followers, screen_name=SCREEN_NAME, count=200).pages():
             screen_names = [i._json["screen_name"] for i in page]
 
             size = 20
@@ -43,7 +49,7 @@ def get_followers_and_tweet_tears():
             print("LENGTH OF IDS ARRAY: ", len(screen_names))
             sleep(10)
     except Exception as e:
-        print("Erro getting followers and tweeting tears...", e)
+        print_err(e)
 
 def get_text():
     with open('reply_text.txt') as f:
@@ -66,6 +72,12 @@ def reply_to_tears_search(usernames,text=None):
         status = find_status(id)
 
         if not status:
+            text = text.replace(SCREEN_NAME, "")
+
+            if KEY_WORD not in text:
+                print("Tears here means tears bot...")
+                continue
+
             print("status hasn't been updated...", status)
             api.update_status(text,in_reply_to_status_id=id, auto_populate_reply_metadata=True)
             status_obj = {
