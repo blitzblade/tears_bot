@@ -1,0 +1,6 @@
+Just posting regular tweets that would have my brand attached. Nothing fancy, nothing spammy, nothing bad etc. Also replying and liking other tweets and retweeting too. I wouldn't use twitter data for anything
+
+Tears bot
+- track statuses already updated with mongodb
+- loop through list of followers using cursor since it returns 20 at a time.
+- 
