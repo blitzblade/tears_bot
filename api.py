@@ -70,6 +70,10 @@ def reply_to_tears_search(usernames,text=None):
         if not text:
             text = gen_text(get_text())
         status = find_status(id)
+        
+        if f"@{SCREEN_NAME}" in tweet._json["text"]:
+            print("Ignore this tweet. It's a reply to your tweet")
+            continue
 
         if not status:
             if tweet.user._json["screen_name"] == SCREEN_NAME:
