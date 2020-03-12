@@ -72,10 +72,8 @@ def reply_to_tears_search(usernames,text=None):
         status = find_status(id)
 
         if not status:
-            text = text.replace(SCREEN_NAME, "")
-
-            if KEY_WORD not in text:
-                print("Tears here means tears bot...")
+            if tweet.user._json["screen_name"] == SCREEN_NAME:
+                print("Tweet belongs to bot...")
                 continue
 
             print("status hasn't been updated...", status)
