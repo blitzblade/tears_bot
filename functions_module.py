@@ -100,7 +100,7 @@ def reply_to_tears_search(usernames,text=None):
         else:
             print("status has already been updated: ", status)
 
-        print("=========================================================================")
+        print("==============================================================================")
                         
 
 def blow_up():
