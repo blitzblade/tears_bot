@@ -87,6 +87,9 @@ def reply_to_tears_search(usernames,text=None):
             if tweet.user._json["screen_name"] == SCREEN_NAME:
                 print("Tweet belongs to bot...")
                 continue
+            if f"@{SCREEN_NAME}" in tweet._json["text"]:
+                print("Ignore this tweet. It's a reply to your tweet")
+                continue
 
             print("status hasn't been updated...", status)
             api.update_status(text,in_reply_to_status_id=id, auto_populate_reply_metadata=True)
