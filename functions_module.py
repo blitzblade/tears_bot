@@ -36,6 +36,12 @@ def like(id):
     except Exception as ex:
         print_err(ex)
 
+def retweet(id):
+    try:
+        api.retweet(id)
+    except Exception as ex:
+        print_err(ex)
+
 def get_followers():
     screen_names = []
     for page in tweepy.Cursor(api.followers, screen_name=api.me()._json["screen_name"], count=200).pages():
@@ -70,6 +76,19 @@ def get_text():
 def gen_text(text_list):
     i = randint(0, len(text_list)-1)
     return text_list[i]
+
+def like_and_retweet(screen_name):
+    q = f"from:{screen_name}"
+    print("QUERY: ",q)
+    for tweet in tweepy.Cursor(api.search, q=q,result_type="recent",rpp=20, include_entities=True).items(20):
+        id = tweet._json["id"]
+        print(tweet._json["text"])
+        print("---------------------------------------------------------------------")
+        like(id)
+        sleep(2)
+        retweet(id)
+        sleep(2)
+
 
 def reply_to_tears_search(usernames,text=None):
     usernames = [f"from:{u}" for u in usernames]
@@ -167,7 +186,7 @@ def blow_up():
 
 
 #getting stalkers
-def reply_to_tcreate_favoriteears(username, text=None):
+def reply_to_tears(username, text=None):
     for t in tweepy.Cursor(api.user_timeline, id=username, tweet_mode="extended").items(100):
         if "tears" in t._json["text"]:
             id = t._json["id"]

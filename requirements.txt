@@ -1,3 +1,4 @@
 tweepy
 pymongo
 nltk
+tensorflow
